@@ -1,0 +1,10 @@
+# build scratch
+*.o
+out/
+node_modules/
+venv/
+__pycache__/
+*.pyc
+*.log
+*.orig
+*.disabled

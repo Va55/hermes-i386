@@ -1,0 +1,29 @@
+From: hermes-i386 provisioning kit
+Subject: [PATCH] main_tui_launch: clamp the V8 heap on 32-bit interpreters
+
+V8 on ia32 cannot reserve a multi-GB heap within a 4 GB address space.
+_resolve_tui_heap_mb() returns the 8192 MB default whenever no cgroup memory
+limit is detected, so the TUI child aborts almost immediately with:
+
+    FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed
+      - JavaScript heap out of memory
+
+Note the failure signature: it dies at ~0.4 MB used, which indicates a failed
+heap reservation rather than genuine memory exhaustion.
+
+Clamp the default for 32-bit interpreters. Applied before the cgroup branch so
+it also caps the floor path.
+
+--- a/hermes_cli/main_tui_launch.py
++++ b/hermes_cli/main_tui_launch.py
+@@ -654,6 +654,10 @@
+     """V8 ``--max-old-space-size`` (MB) that fits the container: ``default_mb`` when unconstrained,
+     else 75% of the cgroup limit (headroom for non-heap RSS + the gateway child), floored at
+     1536MB when the container is > 2GB (below that V8 GC-thrashes)."""
++    # 32-bit (i386/armhf): V8 cannot reserve a multi-GB heap in a 4GB address
++    # space, so the 8192MB default aborts at startup with "Reached heap limit".
++    if sys.maxsize < 2 ** 32:
++        default_mb = min(default_mb, 700)
+     limit = _read_cgroup_memory_limit()
+     if not limit:
+         return default_mb
