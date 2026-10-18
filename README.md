@@ -138,10 +138,13 @@ target, or you do not trust the prebuilt binary), see
 
 ## The three things that are non-obvious
 
-1. **Node 22, not 24.** Node 24 satisfies `engines.node` too, but its bundled
-   npm is 11.6.1 — which falls inside the *excluded* band of
-   `engines.npm: "<11.10.0 || >=11.17.0"`. Node 22 bundles npm 10.9.4, which
-   satisfies it cleanly. Choosing 24 means also downgrading npm.
+1. **Node 22, not 24.** Both satisfy `engines.node`. On npm, `engines.npm` is
+   `"<11.10.0 || >=11.17.0"`, which allows every npm **below 11.10.0 or ≥ 11.17.0**;
+   the *excluded* band is only `11.10.0 … 11.16.x`. Node 22 ships npm 10.9.4 and
+   Node 24 ships npm 11.6.1 — both are `< 11.10.0`, so **both satisfy** the
+   constraint (the trap only bites a Node whose bundled npm lands in 11.10–11.16).
+   Node 22 is the shipped choice because this kit carries a tested, self-contained
+   ia32 build of it — not because Node 24's npm is disallowed.
 
 2. **The heap clamp patch is mandatory and permanent.** V8 on ia32 cannot
    reserve a multi-GB heap in a 4 GB address space. hermes asks for 8192 MB by

@@ -61,15 +61,19 @@ fragile enough that we did not do it.
 
 ## 3. Why Node 22 and not 24
 
-Both satisfy `engines.node`. The deciding factor is the **bundled npm**:
+Both satisfy `engines.node`, and **both also satisfy `engines.npm`**. The range
+`"<11.10.0 || >=11.17.0"` allows everything below 11.10.0 or at/above 11.17.0, so the
+*excluded* band is only `11.10.0 … 11.16.x`:
 
 | | engine floor met | bundled npm | `engines.npm` (`<11.10.0 \|\| >=11.17.0`) |
 |---|---|---|---|
-| Node 22.22.0 | yes (`^22.22.0`) | **10.9.4** | **satisfied** |
-| Node 24.x | yes (`^24.11.0`) | 11.6.1 | **violated** (11.6.1 is inside the excluded 11.10–11.16 band) |
+| Node 22.22.0 | yes (`^22.22.0`) | **10.9.4** | **satisfied** (< 11.10.0) |
+| Node 24.x | yes (`^24.11.0`) | 11.6.1 | **satisfied** (< 11.10.0); the trap only bites npm 11.10–11.16 |
 
-Building Node 24 would also mean downgrading its npm. Node 22 is the clean fit.
-Node 22 is also lighter, which matters on a 3.2 GB machine.
+Correction: an earlier draft of this note called Node 24's npm 11.6.1 "excluded" — it
+is actually below 11.10.0, so it qualifies. Node 22 is shipped because this kit carries
+a tested, self-contained ia32 build of it, and it is lighter, which matters on a 3.2 GB
+machine — not because Node 24's npm is disallowed.
 
 ## 4. The two source-level build fixes
 
