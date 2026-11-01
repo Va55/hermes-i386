@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>hermes-i386 — run hermes-agent on i386 (32-bit x86) Linux, Debian &amp; Alpine</title>
+  <meta name="description" content="Provisioning kit to run hermes-agent on i386 (32-bit x86) Linux — Debian (glibc) and Alpine (musl). Ships a purpose-built static Node 22.22 for i386 (no official 32-bit Node exists), the mandatory V8 heap-clamp patch, a libheif/pillow-heif i386 build, and verified scripts.">
+  <meta name="keywords" content="hermes, hermes-agent, i386, 32-bit, x86, alpine, debian, musl, node, nodejs, provisioning, old-hardware, thinkpad, v8">
+  <meta name="author" content="Va55">
+  <link rel="canonical" href="https://va55.github.io/hermes-i386/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="hermes-i386 — run hermes-agent on i386 (32-bit x86) Linux">
+  <meta property="og:description" content="Provisioning kit for hermes-agent on i386 Linux — Debian & Alpine. Purpose-built Node 22.22 for i386, heap patch, verified scripts.">
+  <meta property="og:url" content="https://va55.github.io/hermes-i386/">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    "name": "hermes-i386",
+    "description": "Provisioning kit to run hermes-agent on i386 (32-bit x86) Linux — Debian (glibc) and Alpine (musl), shipping a purpose-built static Node 22.22 for i386.",
+    "codeRepository": "https://github.com/Va55/hermes-i386",
+    "url": "https://va55.github.io/hermes-i386/",
+    "operatingSystem": "Linux",
+    "license": "https://opensource.org/licenses/MIT",
+    "isAccessibleForFree": true,
+    "author": {
+      "@type": "Person",
+      "name": "Va55",
+      "url": "https://github.com/Va55"
+    }
+  }
+  </script>
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+           max-width: 42rem; margin: 0 auto; padding: 1.5rem; line-height: 1.55; }
+    code { background: rgba(127,127,127,.15); padding: .1em .35em; border-radius: 4px; }
+    a { color: #0969da; } @media (prefers-color-scheme: dark) { a { color: #4493f8; } }
+    h1 { font-size: 1.5rem; } h2 { font-size: 1.15rem; margin-top: 2rem; }
+    .badge { display:inline-block; padding:.15em .6em; border-radius:999px; font-size:.8em;
+             border:1px solid currentColor; margin-right:.35em; }
+  </style>
+</head>
+<body>
+  <h1>hermes-i386</h1>
+  <p><span class="badge">i386 / 32-bit x86</span><span class="badge">Debian (glibc)</span><span class="badge">Alpine (musl)</span><span class="badge">hermes-agent</span></p>
+  <p><strong>Provisioning kit for running <a href="https://github.com/NousResearch/hermes-agent">hermes-agent</a> on i386 (32-bit x86) Linux.</strong>
+  Developed and verified on a Lenovo ThinkPad X60s (Intel Core Duo L2500, 3.2 GB RAM) with Debian 12 bookworm i386 and Alpine Linux i386.</p>
+
+  <h2>Why it exists</h2>
+  <p><strong>There is no 32-bit Node at the required version anywhere.</strong> hermes-agent needs Node ^22.22 / ^24 / ^26 with <code>engine-strict</code>, but no official i386 build exists — nodejs.org and the unofficial builds both 404 for linux-x86, and every Debian i386 Node is either too old or linked against a glibc newer than any released Debian. This kit ships a purpose-built, tested Node 22.22.0 for i386 instead.</p>
+
+  <h2>What you end up with</h2>
+  <ul>
+    <li><code>~/node22/</code> — Node 22.22.0, ia32, self-contained</li>
+    <li><code>/usr/local/bin/{node,npm,npx,corepack}</code> — wired in, apt's left untouched</li>
+    <li>The mandatory <strong>V8 heap-clamp patch</strong> (ia32 can't reserve a multi-GB heap in a 4 GB address space)</li>
+    <li>A source-built libheif in 32-bit <strong>LIGHT mode</strong> for pillow-heif (no i686 wheels exist)</li>
+    <li>Auto-detecting scripts for Debian (glibc) vs Alpine (musl)</li>
+  </ul>
+
+  <h2>Quick start</h2>
+<pre><code>git clone https://github.com/Va55/hermes-i386
+cd hermes-i386
+make all            # node + provision + verify
+</code></pre>
+  <p>See the <a href="https://github.com/Va55/hermes-i386#quick-start-on-a-new-i386-machine">README</a> for the full path, <a href="FINDINGS.md">FINDINGS.md</a> for the constraints hit, and <a href="BUILD-NOTES.md">BUILD-NOTES.md</a> for the source-build details.</p>
+
+  <h2>Related — same author, same 32-bit + musl stack</h2>
+  <p>Pair the agent with a headless browser for the same i386 boxes:
+  <a href="https://github.com/Va55/lightpanda-static">Va55/lightpanda-static</a> — fully static, pure-musl Lightpanda builds (x86_64 &amp; i386), no glibc at runtime.</p>
+
+  <h2>License</h2>
+  <p>MIT — hermes-agent parts copyright (c) 2025 Nous Research, provisioning kit/docs copyright (c) 2026 Va55. See <a href="https://github.com/Va55/hermes-i386/blob/main/LICENSE">LICENSE</a>.</p>
+</body>
+</html>
