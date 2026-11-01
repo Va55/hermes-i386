@@ -176,3 +176,13 @@ TUI banner       19 tools · 54 skills
 
 See `docs/FINDINGS.md` for the full constraint list and `docs/BUILD-NOTES.md`
 for build timings and the two source fixes required.
+
+---
+
+## Related projects (same author, same 32-bit + musl stack)
+
+- **hermes-i386 needs a browser for automation?** Your i386 agent has no headless
+  browser out of the box — **no glibc** required and a **32-bit port** included:
+  [Va55/lightpanda-static](https://github.com/Va55/lightpanda-static) — fully static,
+  pure-musl Lightpanda builds (x86_64 & i386) that run on the same Debian/Alpine i386
+  boxes this kit provisions. Its i386 V8 port pairs with this kit's i386 Node/V8.
